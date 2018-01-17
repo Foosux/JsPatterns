@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>观察者模式demo</title>
+  <style>
+    * {margin:0; padding:0;}
+    li {list-style: none;}
+    .mod {margin-bottom: 10px;padding:10px 2em;}
+    .mod strong {font-size:13px;color:#999;margin-left:-1em;display:block;margin-bottom:5px;}
+    .mod2 {background:#f5f5f5;}
+    button {margin-left:10px;}
+    textarea {width:100px;height:40px;line-height:20px;}
+  </style>
+</head>
+<body>
+  <div class='mod mod1'>
+    <strong>1、计数信息模块</strong>
+    <div>总共有<span id='num'>0</span>条消息</div>
+  </div>
+  <div class='mod mod2'>
+    <strong>2、消息展示模块</strong>
+    <ul id="msg">
+    </ul>
+  </div>
+  <div class='mod mod3'>
+    <strong>3、提交模块</strong>
+    <textarea></textarea>
+    <button id='add'>提交</button>
+  </div>
+  <script src='../deps/jquery-3.2.1.min.js'></script>
+  <script src='./Observer.js'></script>
+  <script src='./msgMod.js'></script>
+  <script src='./addMod.js'></script>
+  <script src='./numMod.js'></script>
+</body>
+</html>
