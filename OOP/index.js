@@ -32,21 +32,21 @@ Book.sayPage = function(){console.log(this.page)}
  * 理解继承
  */
 // 1、类继承
-// 缺点1.实例不能给父类传参
+// 缺点1.实例不能给父类的构造函数传参
 // 缺点2.改写了原型链，需要重新指定 constructor
 // 缺点3.不同实例中引用属性共用内存的问题
 var SubBook = function() {
   this.isSubBook = true
 }
-SubBook.prototype = new Book('CSSBook') // 核心代码
+SubBook.prototype = new Book('CSSBook')     // 核心代码
 SubBook.prototype.priveMethod = function () {console.log('这是sub类私有方法')}
-// SubBook.prototype.constructor = SubBook // 重新指定constructor
-var bookA = new SubBook()
+// SubBook.prototype.constructor = SubBook  // 重新指定constructor
+var bookA = new SubBook()                   // 无法在实例化时传参
 console.log('1.类继承输出：')
-console.log('Book在原型链上?', bookA instanceof Book)        // true
-console.log('SubBook在原型链上?', bookA instanceof SubBook)  // true
-console.log('构造函数是?', bookA.__proto__.constructor.name) // Book
-console.log('是否继承超类的原型方法?', bookA.answer)           // fn
+console.log('Book在原型链上?', bookA instanceof Book)          // true
+console.log('SubBook在原型链上?', bookA instanceof SubBook)    // true
+console.log('构造函数是?', bookA.__proto__.constructor.name)   // Book
+console.log('是否继承超类的原型方法?', bookA.answer)             // fn
 
 // 2、构造函数继承
 // 优点：解决了传参问题
