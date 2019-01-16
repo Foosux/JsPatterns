@@ -5,7 +5,9 @@
  * 2: 子类如果要扩展这个唯一的实例，客户可以不用修改代码就能使用这个扩展后的实例。
  * 3: 可以延迟实例化 (场景：初始化时需要一些额外的信息，而这些信息在声明时无法得知)
  *
- * 应用场景：当一个对象需要和另外的对象进行跨系统协作的时 / SDK 等
+ * 应用场景:
+ * 1: 当一个对象需要和另外的对象进行跨系统协作的时 / SDK 等
+ * 2: 全局之需要1个实例时 如：浮窗
  */
 
 // 例一： 简单惰性单例
@@ -57,3 +59,63 @@ console.log(new LazySingleClass('单例', '1.0') === new LazySingleClass('尝试
     }
   }
 })()
+
+// 例四：浮窗
+var singleton = function(fn) {
+    var instance;
+    return function() {
+        return instance || (instance = fn.apply(this, arguments));
+    }
+};
+// 创建遮罩层
+var createMask = function(){
+    // 创建div元素
+    var mask = document.createElement('div');
+    // 设置样式
+    mask.style.position = 'fixed';
+    mask.style.top = '0';
+    mask.style.right = '0';
+    mask.style.bottom = '0';
+    mask.style.left = '0';
+    mask.style.opacity = 'o.75';
+    mask.style.backgroundColor = '#000';
+    mask.style.display = 'none';
+    mask.style.zIndex = '98';
+    document.body.appendChild(mask);
+    // 单击隐藏遮罩层
+    mask.onclick = function(){
+        this.style.display = 'none';
+    }
+    return mask;
+};
+
+// 创建登陆窗口
+var createLogin = function() {
+    // 创建div元素
+    var login = document.createElement('div');
+    // 设置样式
+    login.style.position = 'fixed';
+    login.style.top = '50%';
+    login.style.left = '50%';
+    login.style.zIndex = '100';
+    login.style.display = 'none';
+    login.style.padding = '50px 80px';
+    login.style.backgroundColor = '#fff';
+    login.style.border = '1px solid #ccc';
+    login.style.borderRadius = '6px';
+
+    login.innerHTML = 'login it';
+
+    document.body.appendChild(login);
+
+    return login;
+};
+
+document.getElementById('btn').onclick = function() {
+    var oMask = singleton(createMask)();
+    oMask.style.display = 'block';
+    var oLogin = singleton(createLogin)();
+    oLogin.style.display = 'block';
+    var w = parseInt(oLogin.clientWidth);
+    var h = parseInt(oLogin.clientHeight);
+}
