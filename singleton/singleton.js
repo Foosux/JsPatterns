@@ -49,7 +49,7 @@ console.log(new LazySingleClass('单例', '1.0') === new LazySingleClass('尝试
 // 区分类的静态实例和单例模式很重要：
 // 尽管单例模式可以被实现成一个静态实例，但是单例可以懒构造，在真正用到之前，单例模式不需要分配资源或者内存。
 
-(function() {
+;(function() {
   window.$ = window.jquery = {
     getId: function (id) {
       return document.getElementById(id)
@@ -60,62 +60,69 @@ console.log(new LazySingleClass('单例', '1.0') === new LazySingleClass('尝试
   }
 })()
 
+console.log('静态实例：', $)
+
 // 例四：浮窗
-var singleton = function(fn) {
-    var instance;
-    return function() {
-        return instance || (instance = fn.apply(this, arguments));
-    }
-};
+var singleton = function() {
+  var instance
+  return function(fn) {
+    return instance || (instance = fn.apply(this, arguments))
+  }
+}
+
 // 创建遮罩层
 var createMask = function(){
-    // 创建div元素
-    var mask = document.createElement('div');
-    // 设置样式
-    mask.style.position = 'fixed';
-    mask.style.top = '0';
-    mask.style.right = '0';
-    mask.style.bottom = '0';
-    mask.style.left = '0';
-    mask.style.opacity = 'o.75';
-    mask.style.backgroundColor = '#000';
-    mask.style.display = 'none';
-    mask.style.zIndex = '98';
-    document.body.appendChild(mask);
-    // 单击隐藏遮罩层
-    mask.onclick = function(){
-        this.style.display = 'none';
-    }
-    return mask;
-};
+  // 创建div元素
+  var mask = document.createElement('div')
+  // 设置样式
+  mask.style.position = 'fixed'
+  mask.style.top = '0'
+  mask.style.right = '0'
+  mask.style.bottom = '0'
+  mask.style.left = '0'
+  mask.style.opacity = '0.75'
+  mask.style.backgroundColor = '#000'
+  mask.style.display = 'none'
+  mask.style.zIndex = '98'
+  document.body.appendChild(mask)
+  // 单击隐藏遮罩层
+  mask.onclick = function(){
+    this.style.display = 'none'
+  }
+  return mask
+}
 
 // 创建登陆窗口
 var createLogin = function() {
-    // 创建div元素
-    var login = document.createElement('div');
-    // 设置样式
-    login.style.position = 'fixed';
-    login.style.top = '50%';
-    login.style.left = '50%';
-    login.style.zIndex = '100';
-    login.style.display = 'none';
-    login.style.padding = '50px 80px';
-    login.style.backgroundColor = '#fff';
-    login.style.border = '1px solid #ccc';
-    login.style.borderRadius = '6px';
+  // 创建div元素
+  var login = document.createElement('div')
+  // 设置样式
+  login.style.position = 'fixed'
+  login.style.top = '50%'
+  login.style.left = '50%'
+  login.style.zIndex = '100'
+  login.style.display = 'none'
+  login.style.padding = '50px 80px'
+  login.style.backgroundColor = '#fff'
+  login.style.border = '1px solid #ccc'
+  login.style.borderRadius = '6px'
 
-    login.innerHTML = 'login it';
+  login.innerHTML = 'login it'
 
-    document.body.appendChild(login);
+  document.body.appendChild(login)
+  // 单击隐藏遮罩层
+  login.onclick = function(){
+    this.style.display = 'none'
+  }
+  return login
+}
 
-    return login;
-};
-
+// 外部变量维持唯一状态，延迟初始化
+let oMask = singleton()
+let oLogin = singleton()
 document.getElementById('btn').onclick = function() {
-    var oMask = singleton(createMask)();
-    oMask.style.display = 'block';
-    var oLogin = singleton(createLogin)();
-    oLogin.style.display = 'block';
-    var w = parseInt(oLogin.clientWidth);
-    var h = parseInt(oLogin.clientHeight);
+  let mask = oMask(createMask)
+  let login = oLogin(createLogin)
+  mask.style.display = 'block'
+  login.style.display = 'block'
 }
